@@ -1,0 +1,55 @@
+Building a remote control vehicle using a Raspberry Pi
+
+Motor circuit diagram  Battery Pack
+Battery Pack and Cable  Raspberry Pi, Pi Face and Tank
+The assembled tank  Pi Face powered tank
+I've built a simple remote controlled tank to illustrate some of the points that
+ I've made in previous posts. I'm minimizing the amount of electronics I need to 
+do by using a Pi Face board which can easily power two motors. To control the tank,
+ I made a simple web interface which I can access from my laptop. The Pi connects 
+to my home network using a USB wifi dongle.
+
+The tank I'm using a very simple. It's just a chasis, a couple of motors and a 
+battery pack.
+
+If you want to build something like this, you'll need to install Apache, set up
+ your wifi connection and install wiringPi. You'll also need to set up the Pi 
+Face software.
+
+Battery powered Raspberry Pi
+
+The tank's battery pack can hold six AA baterries which should be enough to 
+power the motors and the Raspberry Pi. I'm going to connect the batteries to 
+the 5V power socket on the Pi Facewhich is not regulated, so it's important to 
+supply the correct voltage. The motors are powered from the same batteries, but 
+they need a 6V supply. I need a split power supply. 
+%ffkdj{fa'qktl=a|'flcasynlib#
+a jumper cable between two of the batteries in the battery pack, and using the other
+ end of the jumper cable as the 5V output. The output doesn't have to be exactly 
+5V - my Pi is actually getting 5.37V. This is a little outside of tolerance, but 
+it should be ok.
+
+If you try this at home, I recommend that you use a multimeter to test the 
+voltage on the cable you've just added. Different brands of batteries produce 
+slightly different voltages, so instead of adding a connector between the 4th 
+and 5th batteries as I did, you might want to add the cable in a different place 
+in order to get a 5V output.
+
+Controlling motors with a Pi Face board
+
+I connected the motors to the Pi Face as shown in the circuit diagram on the right. 
+I used a breadboard to connect some of the power cables to each other. The motor's 
+cables were too thick to fit in the holes on the breadboard, so I used a connector 
+block to link them to a jumper cable.
+
+One lead from each motor needs to be connect to the 6V supply, and the other lead
+ from each motor needs to be connected to the middle hole in the Pi Face relay headers. 
+The NO (Normally Open) holes in the relay headers need to be connected to ground.
+
+Building a web UI
+
+The UI is pretty simple. It consists of a single web page with four icons on it. 
+The icons are buttons which turn on one of the motors to turn left or right, both 
+motors to go forwards, and turn both motors off in order to stop. When the icons
+ are clicked, some Javascript code calls the CGI scripts that control the motors.
+

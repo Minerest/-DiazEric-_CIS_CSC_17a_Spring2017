@@ -1,0 +1,28 @@
+Get your Raspberry Pi web site on-line
+
+Many people are using their Raspberry Pi as a home web server. It's a great way 
+to host a small site without having to leave a PC running 24/7. 
+If you want people to see your Raspberry Pi web site on the internet, 
+you need to forward a domain name to your home IP address, and then forward a 
+port on your router to your Pi. In this article I'm going to assume that you've 
+already set up a web site and you need to just need to make it accessible on the web.
+
+
+The diagram on the right shows a typical network set up for a Raspberry Pi. The 
+Pi is connected to a router by wifi or ethernet. I use ethernet for my server 
+as it's more stable.
+
+The router has an external IP address which it uses to communicate with the 
+internet, and it has another IP address which it uses to communicate with your
+home network. Let's say the router's external IP address is 88.23.65.123. 
+The router's internal address acts as a gateway for all the devices on your 
+network. When your PC requests data from the internet, requests are automatically 
+sent to the gateway address, and the router forwards the request to the internet. 
+The gateway address is usually something like 192.168.0.1.
+
+Most home routers have a firewall built-in. This stops people from outside of 
+your home network connecting to your PC, but it allows your PC to make outgoing 
+connections to web servers.
+The external IP address of your home router is usually assigned by your ISP's 
+DHCP servers. If you need to restart your router, it will make a new DHCP request 
+to your ISP, and it may be given a new IP address.

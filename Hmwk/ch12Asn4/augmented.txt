@@ -1,0 +1,29 @@
+gEt yOur rAspberry pI wEb sIte oN-lIne
+
+mAny pEople aRe uSing tHeir rAspberry pI aS a hOme wEb sErver. iT's a gReat wAy 
+tO hOst a sMall sIte wIthout hAving tO lEave a PC rUnning 24/7. 
+iF yOu wAnt pEople tO sEe yOur rAspberry pI wEb sIte oN tHe iNternet, 
+yOu nEed tO fOrward a dOmain nAme tO yOur hOme IP aDdress, aNd tHen fOrward a 
+pOrt oN yOur rOuter tO yOur pI. iN tHis aRticle I'm gOing tO aSsume tHat yOu'vE 
+aLready sEt uP a wEb sIte aNd yOu nEed tO jUst nEed tO mAke iT aCcessible oN tHe wEb.
+
+
+tHe dIagram oN tHe rIght sHows a tYpical nEtwork sEt uP fOr a rAspberry pI. tHe 
+pI iS cOnnected tO a rOuter bY wIfi oR eThernet. I uSe eThernet fOr mY sErver 
+aS iT's mOre sTable.
+
+tHe rOuter hAs aN eXternal IP aDdress wHich iT uSes tO cOmmunicate wIth tHe 
+iNternet, aNd iT hAs aNother IP aDdress wHich iT uSes tO cOmmunicate wIth yOur
+hOme nEtwork. lEt's sAy tHe rOuter's eXternal IP aDdress iS 88.23.65.123. 
+tHe rOuter's iNternal aDdress aCts aS a gAteway fOr aLl tHe dEvices oN yOur 
+nEtwork. wHen yOur PC rEquests dAta fRom tHe iNternet, rEquests aRe aUtomatically 
+sEnt tO tHe gAteway aDdress, aNd tHe rOuter fOrwards tHe rEquest tO tHe iNternet. 
+tHe gAteway aDdress iS uSually sOmething lIke 192.168.0.1.
+
+mOst hOme rOuters hAve a fIrewall bUilt-iN. tHis sTops pEople fRom oUtside oF 
+yOur hOme nEtwork cOnnecting tO yOur PC, bUt iT aLlows yOur PC tO mAke oUtgoing 
+cOnnections tO wEb sErvers.
+tHe eXternal IP aDdress oF yOur hOme rOuter iS uSually aSsigned bY yOur ISP's 
+DHCP sErvers. iF yOu nEed tO rEstart yOur rOuter, iT wIll mAke a nEw DHCP rEquest 
+tO yOur ISP, aNd iT mAy bE gIven a nEw IP aDdress.
+
