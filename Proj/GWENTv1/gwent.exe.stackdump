@@ -1,0 +1,6 @@
+Exception: STATUS_ACCESS_VIOLATION at eip=6111E070
+eax=6DD6A082 ebx=E8240591 ecx=1D048091 edx=85B29BF1 esi=6DD6A182 edi=20000000
+ebp=1D048091 esp=0061C510 program=C:\Users\ericd\Desktop\debugTest\GWENT\dist\Debug\Cygwin-Windows\gwent.exe, pid 11712, thread main
+cs=0023 ds=002B es=002B fs=0053 gs=002B ss=002B
+Stack trace:
+Frame     Function  Args
