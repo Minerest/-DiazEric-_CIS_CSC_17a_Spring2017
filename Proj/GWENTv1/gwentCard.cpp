@@ -18,7 +18,7 @@ void Card::setDam(){
 void Card::setName(){
 	name = new char [10];
 	for (int i = 0; i < 10; i++){
-		name[i] = 'A'+rand()%24;
+		name[i] = ' ';
 	}
 }
 
@@ -28,7 +28,7 @@ void Card::setUsed(bool b){
 
 void Card::setType(){
 	int j;
-	j = rand()%6;
+	j = rand()%3;
 	switch(j){
 		case 0:
 			type = 'S';	//Siege unit
@@ -39,7 +39,7 @@ void Card::setType(){
 		case 2:
 			type = 'F';	//Fighter unit
 			break;
-		case 3:
+		case 3:	//Next version of the game
 			type = 'f';	//fog special
 			break;
 		case 4: 
