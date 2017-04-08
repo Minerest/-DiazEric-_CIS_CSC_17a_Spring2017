@@ -50,56 +50,59 @@ int main(int argc, char** argv) {
 	}
 	do{//GAME LOOP
 		do{
-			if (cnt < 10){
-				clock[cnt] = b;
-				for (int i = 0; i < 2; i++){
-					for (int j = 0; j < 10; j++){
-						cClock[cnt][i][j] = (i == 0)? b.p1Hand[j]:b.p2Hand[j];
+			if (cnt < 10){	//arbitrary number, it's rare rounds go on this long.
+				clock[cnt] = b;	//save the state of the board
+				for (int plyrs = 0; plyrs < 2; plyrs++){	//This would be a 3 line loop in python compared to 5 in C++ 
+					for (int cards = 0; cards < 10; cards++){ //if you count the closing brackets as lines
+						cClock[cnt][plyrs][cards] = (plyrs == 0)? b.p1Hand[cards]:b.p2Hand[cards];	//I could add a game counter and REALLY turn back the clock cClock[nGames][cnt][obj][card]									
 					}
 				}
 			}
-			if (b.p1Place){
+			if (b.p1Place){	//if the player can place cards
 				cout<<"\nPLAYER 1"<<endl;
-				pntHand(b, 1);
+				pntHand(b, 1);	//print their hand of cards
 				cout<<"\nWhich card?\n";
-				cin>>cho;
-				if (cho == -1) {
+				cin>>cho;	
+				if (cho == -1) {	//Player chooses to stop playing cards
 					b.p1Place = false;
 					cout<<"You cannot place cards until the next round\n";
 				}
 				else if (cho < -1) {//exit condition
 					cout<<"EXITING GAME\n";
-					saveG(b);
+					saveG(b);	//Save game on quit
 					b.gaming = false;
 					b.match = false;
+					/*cout << "PREDELETE\n";
+					//delete [] b.deck;
+					cout<<"DELETE DECK\n";
+					//delete  b.p1Hand;
+					cout<<"DELETE HAND1\n";
+					//delete [] b.p2Hand;
+					cout << "DELETED\n";*/
 					return 0;
 				}
-				else if (cho == 10){
+				else if (cho == 10){	//H4X
 					do{
 						cout<<"So you found the cheat, huh. How many turns would you like to turn back the clock?\n";
 						cout<<"You can only turn back the clock up to 3 turns and the computer may play a different hand"<<endl;
 						cout<<"CNT = "<<cnt;
 						cin>>cho;
-						if (cho == -1){
-							cnt--;
-							b.turn--;
+						if (cho == -1){	//Pretend the player never activated the cheat
 							continue;
 						}
-					}while(cho > 3 || cho > cnt);
-					b = clock[cnt-cho];	
-					for (int i = 0; i <10; i++){
+					}while(cho > 3 || cho > cnt);	//How far did you think I'd let you rewind the game?
+					b = clock[cnt-cho];		//rewind the board
+					for (int i = 0; i <10; i++){	//for some reason, pointers in structs didn't work just by rewinding the board.
 						b.p1Hand[i] = cClock[cnt-cho][0][i];
-					}
-					for (int i = 0; i < 10; i++){
 						b.p2Hand[i] = cClock[cnt-cho][1][i];
 					}
-					continue;
+					continue;	//TO THE TOP!
 				}
 				else if (cho > 10){//bounds checking
 					cout<<"Number is out of range!\n";
 				}
 				else if (!b.p1Hand[cho].getUsed()){//check if the card has been placed
-					placeCard(b.p1Hand[cho], b);
+					placeCard(b.p1Hand[cho], b);	//place it!
 				}
 				else{
 					cout<<"INVALID ENTRY!\n";
@@ -117,10 +120,10 @@ int main(int argc, char** argv) {
 			b.turn++;
 			cnt++;
 			cout<<"====================================================================================\n";
-		}while(b.match);
-		b.p1Place = true;
+		}while(b.match);	//exit condition of the round loop
+		b.p1Place = true;	//allow players to place cards again
 		b.p2Place = true;
-		b.match = true;
+		b.match = true;		//start a new round
 		if (b.p2Dam >= b.p1Dam){	//computer wins tie
 			b.p2Wins++;
 			cout<<"The AI has won the round!"<<endl;
@@ -135,13 +138,13 @@ int main(int argc, char** argv) {
 			cout<<"The AI has "<<b.p2Wins<<" wins\n";
 			cin>>cho;//breakpoint
 		}
-		clrField(b);
-		if (b.p2Wins == 2)
+		clrField(b);	//clear the field
+		if (b.p2Wins == 2)	//Best 2 out of 3
 			b.gaming = false;
 		else if (b.p1Wins == 2)
 			b.gaming = false;
-		b.round++;
-	}while(b.gaming);	
+		b.round++;		//keep track of nGames
+	}while(b.gaming);	//Main game loop
 	if (b.p2Wins > b.p1Wins)
 		cout<<"\nYou LOSE!\n";
 	else
@@ -149,6 +152,9 @@ int main(int argc, char** argv) {
 						//run fails when I delete pointers after running the game,
 		  			    //but not when I quit the game right off the bat. Why is this?
 //					    ->delete [] deck;// delete [] b.p1Hand; delete [] b.p2Hand;
+	//cout<<"PREDELETE\n";
+	delete [] b.deck; //delete [] b.p1Hand; delete [] b.p2Hand;
+	//cout<<"DELETED\n";
 	return 0;			
 }
 

@@ -77,7 +77,7 @@ int Card::getDam(){
 	return damage;
 }
 
-Card::~Card(){
+/*Card::~Card(){
 	delete [] name;
 	if (desc) delete [] desc;
-}
+}*/

@@ -26,7 +26,7 @@ public:
 	bool getUsed();
 	void pntName();
 
-	~Card();
+	//~Card();
 };
 
 

@@ -22,6 +22,10 @@ struct board {
 	Card *p2Hand;
 	//Card fieldS[3];
 	Card *deck;
+	/*~board(){
+		delete []p1Hand;
+		delete []p2Hand;
+	}*/
 };
 
 
