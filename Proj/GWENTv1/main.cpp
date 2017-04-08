@@ -18,40 +18,43 @@ void GwentAI(board &);
 int main(int argc, char** argv) {
 	srand(time(0));
 	board b = {};
-	Card *deck;	//initialize the array of cards
+	//Set card type indexes to 0. Will add constructor function later
+	b.p1S = 0;b.p1F=0;b.p1A=0;b.p2A=0;b.p2F=0;b.p2S=0;
+	Card *deck;
 	int size = 50, handSz = 10;
-	int cho;// user input
-	bool gaming = true;	
-	deck = setDeck(size);	//create the array of cards. ATM Random values per card
-	b.p1Hand = setHand(deck, size);//Pick 10 cards from the deck
-	b.p2Hand = setHand(deck, size);//There's a 1 in 5 chance to get a duplicate card
-	b.p1Left = 10;//Cards left in the hand
+	int cho;
+	bool gaming = true;
+	deck = setDeck(size);
+	b.p1Hand = setHand(deck, size);
+	b.p2Hand = setHand(deck, size);
+	b.p1Left = 10;
 	b.p2Left = 10;
 	do{//GAME LOOP
-		cout<<"PLAYER 2 HAND\n";
-		pntHand(b, 2);
-		cout<<"\nPLAYER 1"<<endl;
+		cout<<"\nPLAYER 1 HAND"<<endl;
 		pntHand(b, 1);
 		cout<<"\nWhich card?\n";
 		cin>>cho;
-		if (cho < 0) {//exit condition
+		if (cho < 0) {
 			break;
 		}
-		else if (cho > 9){//bounds checking
+		else if (cho > 9){
 			cout<<"Number is out of range!\n";
 		}
-		else if (!b.p1Hand[cho].getUsed()){//check if the card has been placed
+		else if (!b.p1Hand[cho].getUsed()){
 			placeCard(b.p1Hand[cho], b);
 		}
 		else{
 			cout<<"That card has already been placed!\n";
 		}
 		cout<<"PLAYER 1 FIELD\n";
-		pntP1F(b);//Print the player field
+		pntP1F(b);
+		cout<<"\nGETTING BEFORE AI\n";
 		GwentAI(b);//Place AI card on the field
+		cout<<"\nAFTER AI\n";
 		cout<<"PLAYER 2 FIELD\n";
-		pntP2F(b);//print AI field, will combine into 1 function later
-		if (b.p1Left == 0 || b.p2Left == 0) gaming = false;//make sure the player/AI has cards in hand
+		pntP2F(b);
+		if (b.p1Left == 0 || b.p2Left == 0) gaming = false;
+		b.turn++;
 	}while(gaming);	
 	if (b.p2Dam > b.p1Dam){
 		cout<<"\nYou LOSE!\n";
@@ -60,7 +63,7 @@ int main(int argc, char** argv) {
 		cout<<"\nYOU WIN!!!\n";						
 						//run fails when I delete pointers after running the game,
 		  			    //but not when I quit the game right off the bat. Why is this?
-//					    ->delete [] deck;// delete [] b.p1Hand; delete [] b.p2Hand;
+					    //delete [] deck;// delete [] b.p1Hand; delete [] b.p2Hand;
 	return 0;			
 }
 
@@ -71,8 +74,8 @@ int main(int argc, char** argv) {
 void pntP2F(board &b){
 	cout<<"\nTOTAL DAMAGE: "<<b.p2Dam;
 	cout<<"\nFIGHTERS: ";
-	if (b.p2F!= 0){		//b.p2F is the index of the card array in the field
-		for (int i = 0; i < b.p2F; i++){//b.p2F = 0 means there's no fighters in the field
+	if (b.p2F!= 0){
+		for (int i = 0; i < b.p2F; i++){
 			cout<<" D:"<<b.p2Fighter[i].getDam()<<",   ";
 		}
 	}
@@ -101,7 +104,7 @@ void pntP2F(board &b){
 void pntP1F(board &b){
 	cout<<"\nTOTAL DAMAGE: "<<b.p1Dam;
 	cout<<"\nFIGHTERS: ";
-	if (b.p1F!= 0){//array index on the field for the player
+	if (b.p1F!= 0){
 		for (int i = 0; i < b.p1F; i++){
 			cout<<" D:"<<b.p1Fighter[i].getDam()<<",   ";
 		}
@@ -131,10 +134,10 @@ void pntP1F(board &b){
 
 void pntHand(board &b, int player){
 	cout<<"Index Damage   Type\n";
-	if(player == 1){//prints out the cards you have in hand 
+	if(player == 1){
 		for (int i = 0; i < 10; i++){
-			if(!b.p1Hand[i].getUsed()){//if card has been used, don't show in hand
-				cout<<i;//<<"    "<<b.p1Hand[i].getName();I'll make names later
+			if(!b.p1Hand[i].getUsed()){
+				cout<<i;//<<"    "<<b.p1Hand[i].getName();
 				cout<<"     "<<b.p1Hand[i].getDam();
 				cout<<"     "<<b.p1Hand[i].getType();
 				cout<<endl;
@@ -142,7 +145,7 @@ void pntHand(board &b, int player){
 		}
 	}
 	else {
-		for (int i = 0; i < 10; i++) {//This is for debugging. I'll delete it later
+		for (int i = 0; i < 10; i++) {
 			if (!b.p2Hand[i].getUsed()) {
 				cout << i;// << "    " << b.p2Hand[i].getName();
 				cout << "      " << b.p2Hand[i].getDam();
@@ -153,22 +156,23 @@ void pntHand(board &b, int player){
 	}
 }
 
-void GwentAI(board &b){//Places cards on the field from the 'AI'
+void GwentAI(board &b){
+	cout<<"INSIDE AI FunC";
 	if (b.p2Dam > b.p1Dam + 3){	//Stops placing cards once AI has 5 point lead.
-		cout<<"AI WINNING"<<endl;//Prints something out so I know that the AI will stop
+		cout<<"AI WINNING"<<endl;
 		return;
 	}
-	char t;	//type. i.e. Fighter/Archer/Siege
+	char t;
 	int rndPick;
 	do{
 		rndPick = rand()%10;	//pick random card from hand. I will change this to pick a card to get closer to the p1Damage+5 threshhold
-	}while(b.p2Hand[rndPick].getUsed());	//Keep looping until you find something you haven't placed
-	t = b.p2Hand[rndPick].getType();	//Fighter etc.
-	switch (t) {	//Places the actual card on the field
+	}while(b.p2Hand[rndPick].getUsed());
+	t = b.p2Hand[rndPick].getType();
+	switch (t) {
 		case 'S':
 			b.p2Siege[b.p2S] = b.p2Hand[rndPick];
 			b.p2Dam += b.p2Siege[b.p2S].getDam();
-			b.p2S++;	//increases the index for the next placement.
+			b.p2S++;
 			break;
 		case 'A':
 			b.p2Arch[b.p2A] = b.p2Hand[rndPick];
@@ -193,7 +197,7 @@ void GwentAI(board &b){//Places cards on the field from the 'AI'
 		default:
 			break;
 	}
-	b.p2Left -= 1;	//keep track of how many cards they have on hand
+	b.p2Left -= 1;
 }
 
 
@@ -201,7 +205,7 @@ void GwentAI(board &b){//Places cards on the field from the 'AI'
 void placeCard(Card &card, board &b){
 	char t;
 	t = card.getType();
-	switch (t){//literally copy pasta from AI
+	switch (t){
 		case 'S':
 			b.p1Siege[b.p1S] = card;
 			b.p1Dam += b.p1Siege[b.p1S].getDam();
@@ -267,11 +271,11 @@ void placeCard(Card &card, board &b){
 	return;
 }
 
-Card *setDeck(int size){	//create deck
-	Card *deck;	//pointer to Card class type
-	deck = new Card [size];	//Can't delete this :(
-	for (int i = 0; i < size; i++){	//random values for each card
-		deck[i].setDam();			//Will make a deck with unique cards later
+Card *setDeck(int size){
+	Card *deck;
+	deck = new Card [size];
+	for (int i = 0; i < size; i++){
+		deck[i].setDam();
 		deck[i].setName();
 		deck[i].setType();
 		deck[i].setUsed(false);
@@ -279,17 +283,17 @@ Card *setDeck(int size){	//create deck
 	return deck;
 }
 
-Card *setHand(Card *deck, int size){	//create the hand
-	Card *hand;		
-	hand = new Card [10];	//can't delete this either
+Card *setHand(Card *deck, int size){
+	Card *hand;
+	hand = new Card [15];
 	for (int i = 0; i < 10; i++){
-		hand[i] = deck[rand()%size];	//pick random card from deck
-	}									//Will pick duplicates
+		hand[i] = deck[rand()%size];
+	}
 	return hand;
 }
 
-bool coinTos(){		//for future version of the game
+bool coinTos(){
 	bool p1beg;
-	p1beg = rand()%2;	// lol random number to set bool
+	p1beg = rand()%2;
 	return p1beg;
 }

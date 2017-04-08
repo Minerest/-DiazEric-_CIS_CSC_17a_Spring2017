@@ -5,6 +5,7 @@
                    displayName="Header Files"
                    projectFiles="true">
       <itemPath>board.h</itemPath>
+      <itemPath>gwentCard.cpp</itemPath>
       <itemPath>gwentCard.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
@@ -14,7 +15,10 @@
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
                    projectFiles="true">
-      <itemPath>gwentCard.cpp</itemPath>
+      <itemPath>GWENT.txt</itemPath>
+      <itemPath>GWENTBIN.dat</itemPath>
+      <itemPath>hand1.dat</itemPath>
+      <itemPath>hand2.dat</itemPath>
       <itemPath>main.cpp</itemPath>
     </logicalFolder>
     <logicalFolder name="TestFiles"
@@ -39,11 +43,19 @@
       </toolsSet>
       <compileType>
       </compileType>
+      <item path="GWENT.txt" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="GWENTBIN.dat" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="board.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="gwentCard.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="gwentCard.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="hand1.dat" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="hand2.dat" ex="false" tool="3" flavor2="0">
       </item>
       <item path="main.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -68,11 +80,19 @@
           <developmentMode>5</developmentMode>
         </asmTool>
       </compileType>
+      <item path="GWENT.txt" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="GWENTBIN.dat" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="board.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="gwentCard.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="gwentCard.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="hand1.dat" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="hand2.dat" ex="false" tool="3" flavor2="0">
       </item>
       <item path="main.cpp" ex="false" tool="1" flavor2="0">
       </item>

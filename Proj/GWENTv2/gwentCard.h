@@ -18,6 +18,7 @@ public:
 	void setName();
 	void setDam();
 	void setType();
+	void setZero();
 	void setUsed(bool);
 	char getType();
 	char *getName();

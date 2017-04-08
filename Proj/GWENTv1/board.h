@@ -13,8 +13,8 @@ struct board {
 	int p1Dam, p2Dam;
 	int p1S, p1F, p1A;	//Index for player field
 	int p2S , p2F, p2A; //Index for computer field
-	Card p1Arch [5], p1Fighter [5], p1Siege [5];
-	Card p2Arch [5], p2Fighter[5], p2Siege[5];	//5 card maximum per field on board;
+	Card p1Arch [10], p1Fighter [10], p1Siege [10];
+	Card p2Arch [10], p2Fighter[10], p2Siege[10];
 	Card p1Spec, p2Spec;
 	Card *p1Hand;
 	Card *p2Hand;

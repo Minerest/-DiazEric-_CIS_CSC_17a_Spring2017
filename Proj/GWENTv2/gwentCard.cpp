@@ -14,6 +14,9 @@ void Card::normDam(){
 void Card::setDam(){
 	damage = rand()%10+1;
 }
+void Card::setZero(){
+	damage = 0;
+}
 
 void Card::setName(){
 	name = new char [10];

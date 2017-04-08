@@ -1,0 +1,16 @@
+        GGGGGGGGGGGGGWWWWWWWW                           WWWWWWWWEEEEEEEEEEEEEEEEEEEEEENNNNNNNN        NNNNNNNNTTTTTTTTTTTTTTTTTTTTTTT
+     GGG::::::::::::GW::::::W                           W::::::WE::::::::::::::::::::EN:::::::N       N::::::NT:::::::::::::::::::::T
+   GG:::::::::::::::GW::::::W                           W::::::WE::::::::::::::::::::EN::::::::N      N::::::NT:::::::::::::::::::::T
+  G:::::GGGGGGGG::::GW::::::W                           W::::::WEE::::::EEEEEEEEE::::EN:::::::::N     N::::::NT:::::TT:::::::TT:::::T
+ G:::::G       GGGGGG W:::::W           WWWWW           W:::::W   E:::::E       EEEEEEN::::::::::N    N::::::NTTTTTT  T:::::T  TTTTTT
+G:::::G                W:::::W         W:::::W         W:::::W    E:::::E             N:::::::::::N   N::::::N        T:::::T        
+G:::::G                 W:::::W       W:::::::W       W:::::W     E::::::EEEEEEEEEE   N:::::::N::::N  N::::::N        T:::::T        
+G:::::G    GGGGGGGGGG    W:::::W     W:::::::::W     W:::::W      E:::::::::::::::E   N::::::N N::::N N::::::N        T:::::T        
+G:::::G    G::::::::G     W:::::W   W:::::W:::::W   W:::::W       E:::::::::::::::E   N::::::N  N::::N:::::::N        T:::::T        
+G:::::G    GGGGG::::G      W:::::W W:::::W W:::::W W:::::W        E::::::EEEEEEEEEE   N::::::N   N:::::::::::N        T:::::T        
+G:::::G        G::::G       W:::::W:::::W   W:::::W:::::W         E:::::E             N::::::N    N::::::::::N        T:::::T        
+ G:::::G       G::::G        W:::::::::W     W:::::::::W          E:::::E       EEEEEEN::::::N     N:::::::::N        T:::::T        
+  G:::::GGGGGGGG::::G         W:::::::W       W:::::::W         EE::::::EEEEEEEE:::::EN::::::N      N::::::::N      TT:::::::TT      
+   GG:::::::::::::::G          W:::::W         W:::::W          E::::::::::::::::::::EN::::::N       N:::::::N      T:::::::::T      
+     GGG::::::GGG:::G           W:::W           W:::W           E::::::::::::::::::::EN::::::N        N::::::N      T:::::::::T      
+        GGGGGG   GGGG            WWW             WWW            EEEEEEEEEEEEEEEEEEEEEENNNNNNNN         NNNNNNN      TTTTTTTTTTT  
