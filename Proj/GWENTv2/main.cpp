@@ -24,7 +24,9 @@ void loadG(board &);
 int main(int argc, char** argv) {
 	srand(time(0));
 	board b = {};
-	int size = 50; 
+	board clock[10];
+	Card cClock[10][2][10];
+	int size = 50, cnt = 0; 
 	int cho;// user input
 	GWENT();//Game base off The Witcher 3
 	cout<<"Would you like to load the last saved game?\n";
@@ -48,6 +50,14 @@ int main(int argc, char** argv) {
 	}
 	do{//GAME LOOP
 		do{
+			if (cnt < 10){
+				clock[cnt] = b;
+				for (int i = 0; i < 2; i++){
+					for (int j = 0; j < 10; j++){
+						cClock[cnt][i][j] = (i == 0)? b.p1Hand[j]:b.p2Hand[j];
+					}
+				}
+			}
 			if (b.p1Place){
 				cout<<"\nPLAYER 1"<<endl;
 				pntHand(b, 1);
@@ -64,14 +74,35 @@ int main(int argc, char** argv) {
 					b.match = false;
 					return 0;
 				}
-				else if (cho > 9){//bounds checking
+				else if (cho == 10){
+					do{
+						cout<<"So you found the cheat, huh. How many turns would you like to turn back the clock?\n";
+						cout<<"You can only turn back the clock up to 3 turns and the computer may play a different hand"<<endl;
+						cout<<"CNT = "<<cnt;
+						cin>>cho;
+						if (cho == -1){
+							cnt--;
+							b.turn--;
+							continue;
+						}
+					}while(cho > 3 || cho > cnt);
+					b = clock[cnt-cho];	
+					for (int i = 0; i <10; i++){
+						b.p1Hand[i] = cClock[cnt-cho][0][i];
+					}
+					for (int i = 0; i < 10; i++){
+						b.p2Hand[i] = cClock[cnt-cho][1][i];
+					}
+					continue;
+				}
+				else if (cho > 10){//bounds checking
 					cout<<"Number is out of range!\n";
 				}
 				else if (!b.p1Hand[cho].getUsed()){//check if the card has been placed
 					placeCard(b.p1Hand[cho], b);
 				}
 				else{
-					cout<<"That card has already been placed!\n";
+					cout<<"INVALID ENTRY!\n";
 				}
 			}
 			cout<<"FIELD\n";
@@ -84,6 +115,7 @@ int main(int argc, char** argv) {
 			if (b.p1Left == 0)b.p1Place = false;
 			if (b.p1Place == false && b.p2Place == false)b.match = false;
 			b.turn++;
+			cnt++;
 			cout<<"====================================================================================\n";
 		}while(b.match);
 		b.p1Place = true;
