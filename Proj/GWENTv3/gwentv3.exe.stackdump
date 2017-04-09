@@ -1,0 +1,9 @@
+Exception: STATUS_ACCESS_VIOLATION at eip=0040188D
+eax=0C01000D ebx=00625DB4 ecx=00000000 edx=006271B4 esi=0062BCBC edi=0062CC4C
+ebp=0062CC78 esp=00625DA0 program=C:\Users\ericd\Desktop\DiazEric-_CIS_CSC_17a_Spring2017-master\DiazEric-_CIS_CSC_17a_Spring2017-master\Proj\GWENTv3\dist\Debug\Cygwin-Windows\gwentv3.exe, pid 6288, thread main
+cs=0023 ds=002B es=002B fs=0053 gs=002B ss=002B
+Stack trace:
+Frame     Function  Args
+0062CC78  0040188D (00000001, 0062CC9C, 20000100, 610079DA)
+0062CD18  61007A3F (00000000, 0062CD74, 61006A70, 00000000)
+End of stack trace
