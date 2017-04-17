@@ -283,14 +283,14 @@ void GwentAI(board &b, bool& placing){//Places cards on the field from the 'AI'
 		case 'S':
 			b.p2Siege[b.p2S] = b.p2Hand[rndPick];
 			b.p2Dam += b.p2Siege[b.p2S].getDam();
-			b.p2S++;	//increases the index for the next placement.
-			break;
-		case 'A':
-			b.p2Arch[b.p2A] = b.p2Hand[rndPick];
-			b.p2Dam += b.p2Arch[b.p2A].getDam();
-			b.p2A++;
-			break;
-		case 'F':
+				b.p2S++;	//increases the index for the next placement.
+				break;
+			case 'A':
+				b.p2Arch[b.p2A] = b.p2Hand[rndPick];
+				b.p2Dam += b.p2Arch[b.p2A].getDam();
+				b.p2A++;
+				break;
+			case 'F':
 			b.p2Fighter[b.p2F] = b.p2Hand[rndPick];
 			b.p2Dam += b.p2Fighter[b.p2F].getDam();
 			b.p2F++;
@@ -378,10 +378,11 @@ void GWENT(){
 	ifstream g;
 	g.open("GWENT.txt");	//Text art by http://patorjk.com/software/taag/
 	while(!g.eof()){
-		getline(g, t);	//get a character from GWENT.txt
+		getline(g, t);
 		t+=newL;
 		cout<<t;
 	}
+	g.close();
 }
 
 void saveG(board &b){
