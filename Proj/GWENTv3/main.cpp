@@ -10,9 +10,9 @@ using namespace std;
 
 
 Card *setDeck(int);
-Card *setHand(Card *, int);
+Card *setHand(Card *, const int);
 void placeCard(Card &, board &);
-void pntHand(board &, int);
+void pntHand(board &, const int);
 void pntP1F(board &);
 void pntP2F(board &);
 void GwentAI(board &, bool& placing);
@@ -38,7 +38,7 @@ int main(int argc, char** argv) {
 		//load game from binary files
 		loadG(b);
 		pntP1F(b);
-		cout << "===PLAYERFIELD ^====================AI FIELD v=============================================================================================\n";
+		cout << "==="<<b.p1Name<<" ^====================AI FIELD v=============================================================================================\n";
 		pntP2F(b);
 	}
 	else {
@@ -241,7 +241,7 @@ void pntP1F(board &b){
 	return;
 }
 
-void pntHand(board &b, int player){
+void pntHand(board &b, const int player){
 	cout<<"Index Damage   Type\n";
 	if(player == 1){//prints out the cards you have in hand 
 		for (int i = 0; i < 10; i++){
@@ -363,7 +363,7 @@ Card *setDeck(int size){	//create deck
 	return deck;
 }
 
-Card *setHand(Card *deck, int size){	//create the hand
+Card *setHand(Card *deck, const int size){	//create the hand
 	Card *hand;		
 	hand = new Card [10];	//can't delete this either
 	for (int i = 0; i < 10; i++){
@@ -424,4 +424,6 @@ void newG(board &b) {
 	b.p2Hand = setHand(b.deck, size); //There's a high chance to see a duplicate card
 	b.p1Left = 10; //Cards left in the hand
 	b.p2Left = 10;
+	cout<<"What's your name\n";
+	cin>>b.p1Name;
 }
