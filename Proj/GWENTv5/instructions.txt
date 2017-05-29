@@ -1,0 +1,15 @@
+INSTRUCTIONS
+
+The goal of the game is to win 2 out 3 rounds. You are dealt 10 cards to your hand.
+You place cards from your hand to the field. The field is where all the cards in use
+are placed. You begin by placing a card and then the computer will decide if it wants to place a card.
+The damage attribute is how much damage is dealt during that round. 
+The type attribute determines whether a card is an Archer, a Siege unit, or a Fighter.
+You can choose to stop placing cards at any time, however, 
+if you do, the computer can choose to continue.
+At the end of the round, whoever is dealing the most damage wins that round.
+At the beginning of the a new round, all units on the field are discarded.
+
+As the game is playing, enter the index number from your hand to place the card in the field.
+Enter -1 to stop placing cards for the round, enter a number less than -1 to quit and save the game.
+press 10 to turn back the clock.

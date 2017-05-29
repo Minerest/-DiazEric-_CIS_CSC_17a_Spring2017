@@ -5,33 +5,33 @@
 #include <fstream>
 #include <iomanip>
 
-#include "board.h"
+#include "Board.h"
 #include "gwentCard.h"
 using namespace std;
 
 
-Card *setDeck(int);
-Card *setHand(Card *, const int);
-void placeCard(Card &, board &);
-void pntHand(board &, const int);
-void pntP1F(board &);
-void pntP2F(board &);
-void GwentAI(board &, bool& placing);
-void clrField(board &);
-void GWENT();
-void saveG(board &);
-void loadG(board &);
-void newG(board &);
+Minion *setDeck(const int);	//creates a deck of Minions
+Minion *setHand(Minion *, const int);//creates a new minion ptr in each player hand and sets it equal to random cards in the deck
+void placeCard(Minion &, Board &);//places a Minion from player 1 onto the field
+void pntHand(Board &, const int);//prints the hand
+void pntP1F(Board &);//prints the field where all Minions are
+void pntP2F(Board &);
+void GwentAI(Board &, bool& placing);	//AI placement
+void clrField(Board &);	//clears the field.
+void GWENT();//prints some text art
+void saveG(Board &);//serializes the game in binary files
+void loadG(Board &);//loads game from binary files
+void newG(Board &);//starts a new game.
 
-int main(int argc, char** argv) {
+int main(int argc, char** argv) {	
 	srand(time(0));
-	board b = {};
-	board clock[10];
-	Card cClock[10][2][10];		//NOW WITH 3D EFFECTS
+	Board b = {};
+	Board clock[10];
+	Minion cClock[10][2][10];		//NOW WITH 3D EFFECTS
 	int cnt = 0; 
 	int cho;// user input
 	bool again;
-	GWENT();//Game based off The Witcher 3
+	GWENT();  //Game based off The Witcher 3
 	cout<<"Would you like to load the last saved game?\n";
 	cout<<"press 0 for no, press 1 for yes\n";
 	cin>>cho;
@@ -39,17 +39,17 @@ int main(int argc, char** argv) {
 		//load game from binary files
 		loadG(b);
 		pntP1F(b);
-		cout << "==="<<b.p1Name<<" ^====================AI FIELD v=============================================================================================\n";
+		cout << "=== ^====================AI FIELD v=============================================================================================\n";
 		pntP2F(b);
 	}
 	else {
-		newG(b);	//setup a new game
+		newG(b);	//Do you want to play a game?
 	}
 	do{
 		do{//GAME LOOP
 			do{//match loop
 				if (cnt < 10){	//amount of cards in hand, it's rare rounds go on this long. Also bounds check to prevent going over allocated memory.
-					clock[cnt] = b;	//save the state of the board
+					clock[cnt] = b;	//save the state of the Board
 					for (int plyrs = 0; plyrs < 2; plyrs++){	
 						for (int cards = 0; cards < 10; cards++){ 
 							cClock[cnt][plyrs][cards] = (plyrs == 0)? b.p1Hand[cards]:b.p2Hand[cards];	//I could add a game counter and REALLY turn back the clock cClock[nGames][cnt][obj][card], but why stop there?									
@@ -74,12 +74,17 @@ int main(int argc, char** argv) {
 						b.gaming = false;
 						b.match = false;
 						cout << "PREDELETE\n";	
-						delete [] b.deck;		//cant figure out why run fails
-						cout<<"DELETE DECK\n";	//when I load the game and then
-						delete  b.p1Hand;		//try to delete the arrays.
-						cout<<"DELETE HAND1\n";
-						delete [] b.p2Hand;
-						cout << "DELETED\n";
+						delete [] b.deck;	
+						cout<<"DELETED DECK\n";
+						delete []b.p1Hand;
+						
+						delete []b.p2Hand;
+						cout<<"deleted!";
+						//cout<<"DELETE DECK\n";
+//						delete  []b.p1Hand;		
+//						cout<<"DELETE HAND1\n";
+//						delete [] b.p2Hand;
+//						cout << "DELETED\n";
 						return 0;
 					}
 					else if (cho == 10 && cnt >=3){	//H4X
@@ -92,8 +97,8 @@ int main(int argc, char** argv) {
 								continue;
 							}
 						}while(cho > 3 || cho > cnt);	//How far did you think I'd let you rewind the game?
-						b = clock[cnt-cho];		//rewind the board
-						for (int i = 0; i <10; i++){	//for some reason, pointers in structs didn't work just by rewinding the board.
+						b = clock[cnt-cho];		//rewind the Board
+						for (int i = 0; i <10; i++){	//for some reason, pointers in structs didn't work just by rewinding the Board.
 							b.p1Hand[i] = cClock[cnt-cho][0][i];
 							b.p2Hand[i] = cClock[cnt-cho][1][i];
 						}
@@ -154,15 +159,16 @@ int main(int argc, char** argv) {
 		cin>>cho;
 		again = cho == 1 ? true: false;
 		newG(b);
-	}while(again);			
-	delete [] b.deck; delete [] b.p1Hand; delete [] b.p2Hand; 
-	return 0;			
+	}while(again);	
+	for (int i = 0; i < 50; i++)delete []b.deck[i].getName();
+	delete [] b.deck; delete [] b.p1Hand; delete [] b.p2Hand;	//SUPER weird bug, the game deletes fine both on new and load games HERE
+	return 0;													// But the game crashes when you close the game early after you load the game.
 }
 
 //===================================================================================================================================
 //===================================================================================================================================
 
-void clrField(board &b){
+void clrField(Board &b){
 	//Reset the playing field and indexes to 0;
 	for (int i = 0;i < 10; i++){
 		b.p1Arch[i].setZero();
@@ -181,7 +187,7 @@ void clrField(board &b){
 	b.p2Dam = 0;
 	b.p1Dam = 0;
 }
-void pntP2F(board &b){
+void pntP2F(Board &b){
 	cout<<"\nTOTAL DAMAGE: "<<b.p2Dam;
 	cout<<"\nFIGHTERS: ";
 	if (b.p2F!= 0){		//b.p2F is the index of the card array in the field
@@ -211,7 +217,7 @@ void pntP2F(board &b){
 	cout<<endl;
 }
 
-void pntP1F(board &b){
+void pntP1F(Board &b){
 	cout<<"\nTOTAL DAMAGE: "<<b.p1Dam;
 	cout<<"\nFIGHTERS: ";
 	if (b.p1F!= 0){//array index on the field for the player
@@ -242,7 +248,7 @@ void pntP1F(board &b){
 	return;
 }
 
-void pntHand(board &b, const int player){
+void pntHand(Board &b, const int player){
 	cout<<"Index  Damage   Type\n";
 	if(player == 1){//prints out the cards you have in hand 
 		for (int i = 0; i < 10; i++){
@@ -266,7 +272,7 @@ void pntHand(board &b, const int player){
 	}
 }
 
-void GwentAI(board &b, bool& placing){//Places cards on the field from the 'AI'
+void GwentAI(Board &b, bool& placing){//Places cards on the field from the 'AI'
 	if (!placing)	return;
 	if (b.p2Dam > b.p1Dam + 3){	//Stops placing cards once AI has 3 point lead or if it lost a round.
 		placing = false;
@@ -315,7 +321,7 @@ void GwentAI(board &b, bool& placing){//Places cards on the field from the 'AI'
 
 
 
-void placeCard(Card &card, board &b){
+void placeCard(Minion &card, Board &b){
 	char t;
 	t = card.getType();
 	switch (t){//literally copy pasta from AI
@@ -335,13 +341,13 @@ void placeCard(Card &card, board &b){
 			b.p1F++;
 //========================For Future versions =============================
 			break;
-		case 'f':
+		case 'C':
 				//b.fieldS[0] = card;
 			break;
-		case 'r':
+		case 'R':
 				//b.fieldS[1] = card;
 			break;
-		case 'i':
+		case 'I':
 				//b.fieldS[2] = card;
 			break;
 		default:
@@ -352,21 +358,22 @@ void placeCard(Card &card, board &b){
 	return;
 }
 
-Card *setDeck(int size){	//create deck
-	Card *deck;	//pointer to Card class type
-	deck = new Card [size];	//Can't delete this :(
+Minion *setDeck(const int size){	//create deck
+	Minion *deck;	//pointer to Card class type
+	deck = new Minion[size];	
 	for (int i = 0; i < size; i++){	//random values for each card
 		deck[i].setDam();			//Will make a deck with unique cards later
 		deck[i].setName();
 		deck[i].setType();
 		deck[i].setUsed(false);
+		deck[i].nmDel = false;
 	}
 	return deck;
 }
 
-Card *setHand(Card *deck, const int size){	//create the hand
-	Card *hand;		
-	hand = new Card [10];	//can't delete this either
+Minion *setHand(Minion *deck, const int size){	//create the hand
+	Minion *hand;		
+	hand = new Minion [10];	
 	for (int i = 0; i < 10; i++){
 		hand[i] = deck[rand()%size];	//pick random card from deck
 	}									//Will pick duplicates
@@ -386,45 +393,51 @@ void GWENT(){
 	g.close();
 }
 
-void saveG(board &b){
-	fstream bin, hand1, hand2;
+void saveG(Board &b){
+	fstream bin, hand1, hand2, deck;
+	deck.open("DECK.dat",ios::out | ios::binary);
 	bin.open("GWENTBIN.dat", ios::out | ios::binary);
 	hand1.open("hand1.dat", ios::out | ios::binary);
 	hand2.open("hand2.dat", ios::out | ios::binary);
+	deck.write(reinterpret_cast<char *>(&b.deck[0]), sizeof(Minion)*50);
 	bin.write(reinterpret_cast<char *>(&b), sizeof(b));
-	hand1.write(reinterpret_cast<char *>(&b.p1Hand[0]), sizeof(Card)*10);
-	hand2.write(reinterpret_cast<char *> (&b.p2Hand[0]), sizeof(Card)*10);
+	hand1.write(reinterpret_cast<char *>(&b.p1Hand[0]), sizeof(Minion)*10);
+	hand2.write(reinterpret_cast<char *> (&b.p2Hand[0]), sizeof(Minion)*10);
 	bin.close();
 	hand1.close();
 	hand2.close();
 }
 
-void loadG(board &b){
-	fstream bin, hand1, hand2;
+void loadG(Board &b){
+	fstream bin, hand1, hand2, deck;
 	//open files
+	deck.open("DECK.dat", ios::in | ios::binary);
 	bin.open("GWENTBIN.dat", ios::in | ios::binary);
 	hand1.open("hand1.dat", ios::in | ios::binary);
 	hand2.open("hand2.dat", ios::in | ios::binary);
-	b.p1Hand = new Card [10];
-	b.p2Hand = new Card [10];
+	b.deck = new Minion[50];
+	b.p1Hand = new Minion [10];
+	b.p2Hand = new Minion [10];
+	deck.read(reinterpret_cast<char *>(&b.deck[0]), sizeof(Minion)*50);
 	bin.read(reinterpret_cast<char *>(&b), sizeof(b));
-	hand1.read(reinterpret_cast<char *> (&b.p1Hand[0]), sizeof (Card)*10);
-	hand2.read(reinterpret_cast<char *> (&b.p2Hand[0]), sizeof (Card)*10);
+	hand1.read(reinterpret_cast<char *> (&b.p1Hand[0]), sizeof (Minion)*10);
+	hand2.read(reinterpret_cast<char *> (&b.p2Hand[0]), sizeof (Minion)*10);
 	bin.close();
 	hand1.close();
-	hand2.close();
+	hand2.close();	
+	char t;
+	cin>>t;
+	cout<<"CLOSED!";
 }
 
-void newG(board &b) {
+void newG(Board &b) {
 	int size = 50;
 	b.p1Wins = 0;
 	b.p2Wins = 0;
 	b.gaming = true, b.match = true, b.p1Place = true, b.p2Place = true;
-	b.deck = setDeck(size); //create the array of cards. ATM Random values per card
+	b.deck = setDeck(size); //create the array of cards. atm Random values per card
 	b.p1Hand = setHand(b.deck, size); //Pick 10 cards from the deck
 	b.p2Hand = setHand(b.deck, size); //There's a high chance to see a duplicate card
-	b.p1Left = 10; //Cards left in the hand
+	b.p1Left = 10; //amount of cards left in the hand
 	b.p2Left = 10;
-	cout<<"What's your name\n";
-	cin>>b.p1Name;
 }
