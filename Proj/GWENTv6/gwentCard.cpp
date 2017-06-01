@@ -2,6 +2,8 @@
 #include <string>
 #include <vector>
 #include <iostream>
+#include <fstream>
+
 #include "gwentCard.h"
 #include "board.h"
 
@@ -54,6 +56,17 @@ void Weather::setName(){
 	}
 }
 
+void Minion::read(std::fstream &f, int sz){
+	f >> this->name;
+
+	this->name[sz] = '\0';
+}
+
+
+void Minion::allocate(int sz){
+	this->name = new char [sz];
+}
+
 void Minion::setName(){//Creates random name for Minion object
 	//bug: The names aren't created correctly the first time around, however after the game repeats, the names are generated as intended. I hate C++.
 	//bug fix: You have to add the null terminator manually. I still hate C++
@@ -67,6 +80,7 @@ void Minion::setName(){//Creates random name for Minion object
 	vowels = new char [26];
 	cnst = new char [26];
 	this->name = new char [nmLn+1];
+	this->nmL = nmLn+1;
 	
 	//These next 2 loops are the results of pulling my hair out while trying to figure out what was going on.
 	for (int i = 0; i < 5; i++) {

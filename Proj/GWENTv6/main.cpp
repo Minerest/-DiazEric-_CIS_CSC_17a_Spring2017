@@ -9,7 +9,7 @@
 #include "gwentCard.h"
 using namespace std;
 
-
+//Who needs globals when you can just pass around a struct?!
 Minion *setDeck(const int);	//creates a deck of Minions
 Minion *setHand(Minion *, const int);//creates a new minion ptr in each player hand and sets it equal to random cards in the deck
 void placeCard(Minion &, Board &);//places a Minion from player 1 onto the field
@@ -40,6 +40,7 @@ int main(int argc, char** argv) {
 	cin>>cho;
 	if(cho == 1){
 		//load game from binary files
+		cout<<"PRELOAD\n";
 		loadG(b);
 		pntP1F(b);
 		cout << "=== ^====================AI FIELD v=============================================================================================\n";
@@ -76,12 +77,11 @@ int main(int argc, char** argv) {
 						saveG(b);	//Save game on quit
 						b.gaming = false;
 						b.match = false;
-						cout << "PREDELETE\n";									//I had a bad bug here
+						cout << "PREDELETE\n";									  //I had a bad bug here
 						for (int i = 0; i < 50; i++)delete [] b.deck[i].getName();//Fixing it helped me understand the concept of ownership.
 						delete [] b.deck;										  //Had to wrap my mind around the fact that 2 variables were pointing to the same piece of data.
 						cout<<"DELETED DECK\n";
 						delete []b.p1Hand;
-						
 						delete []b.p2Hand;
 						cout<<"DELETED HANDS!";
 						return 0;
@@ -90,7 +90,7 @@ int main(int argc, char** argv) {
 						do{
 							cout<<"So you found the cheat, huh. How many turns would you like to turn back the clock?\n";
 							cout<<"You can only turn back the clock up to 3 turns and the computer may play a different hand"<<endl;
-							cout<<"CNT = "<<cnt;
+							cout<<"CNT = "<<cnt<<endl;
 							cin>>cho;
 							if (cho == -1){	//Pretend the player never activated the cheat
 								continue;
@@ -100,6 +100,7 @@ int main(int argc, char** argv) {
 						for (int i = 0; i <10; i++){	//for some reason, pointers in structs didn't work just by rewinding the Board.
 							b.p1Hand[i] = cClock[cnt-cho][0][i];
 							b.p2Hand[i] = cClock[cnt-cho][1][i];
+							
 						}
 						continue;	//TO THE TOP!
 					}
@@ -267,7 +268,7 @@ void pntHand(Board &b, const int player){
 	else {
 		for (int i = 0; i < 10; i++) {//This is for debugging. I'll delete it later
 			if (!b.p2Hand[i].getUsed()) {
-				cout << i;// << "    " << b.p2Hand[i].getName();
+				cout << i;
 				cout << setw(8)<< b.p2Hand[i].getDam();
 				cout << setw(8)<< b.p2Hand[i].getType();
 				cout << setw(8) << b.p2Hand[i].getUsed();
@@ -277,13 +278,21 @@ void pntHand(Board &b, const int player){
 	}
 }
 
+template <class T>	//This is weird, do I really define templates here? There's no function prototype or anything. I'd love to know what's the standard convention
+T isDonePlacing(T pDam, T cDam){
+	if (cDam > pDam+3){
+		return true;
+	}
+	return false;
+}
+
 void GwentAI(Board &b, bool& placing){//Places cards on the field from the 'AI'
 	if (!placing)	return;
 	if (b.p1Place == false && b.p2Dam > b.p1Dam){
 		placing = false;
 		return;
 	}
-	if (b.p2Dam > b.p1Dam + 3){	//Stops placing cards once AI has 3 point lead or if it lost a round.
+	if (isDonePlacing(b.p1Dam, b.p2Dam)){	//Stops placing cards once AI has 3 point lead or if it lost a round.
 		placing = false;
 		return;
 	}
@@ -453,15 +462,34 @@ void GWENT(){
 }
 
 void saveG(Board &b){
-	fstream bin, hand1, hand2, deck;
+	fstream bin, hand1, hand2, deck, nm1, nm2;
+	nm1.open("nm1.dat",ios::out);
+	nm2.open("nm2.dat",ios::out);
 	deck.open("DECK.dat",ios::out | ios::binary);
 	bin.open("GWENTBIN.dat", ios::out | ios::binary);
 	hand1.open("hand1.dat", ios::out | ios::binary);
 	hand2.open("hand2.dat", ios::out | ios::binary);
+	
+	
 	deck.write(reinterpret_cast<char *>(&b.deck[0]), sizeof(Minion)*50);
 	bin.write(reinterpret_cast<char *>(&b), sizeof(b));
 	hand1.write(reinterpret_cast<char *>(&b.p1Hand[0]), sizeof(Minion)*10);
 	hand2.write(reinterpret_cast<char *> (&b.p2Hand[0]), sizeof(Minion)*10);
+	
+	
+	for (int i = 0; i < 10; i++){
+		cout<<i<<"   ";
+		cout<<b.p1Hand[i].getName()<<"   ";
+		cout<<b.p2Hand[i].getName()<<endl;
+		nm1 << b.p1Hand[i].getName()<< ' ';
+		nm2 << b.p2Hand[i].getName() << ' ';
+		
+//		nm1.write(b.p1Hand[i].getName(), b.p1Hand[i].nmL);
+//		nm2.write(b.p2Hand[i].getName(), b.p2Hand[i].nmL);
+	}
+	
+	nm1.close();
+	nm2.close();
 	bin.close();
 	hand1.close();
 	hand2.close();
@@ -469,31 +497,47 @@ void saveG(Board &b){
 }
 
 void loadG(Board &b){
-	fstream bin, hand1, hand2, deck;
+	fstream bin, hand1, hand2, deck, nm1,nm2;
+	int hndSz = 10;
+	
 	//open files
+	nm1.open("nm1.dat", ios::in);
+	nm2.open("nm2.dat", ios::in);
 	deck.open("DECK.dat", ios::in | ios::binary);
 	bin.open("GWENTBIN.dat", ios::in | ios::binary);
 	hand1.open("hand1.dat", ios::in | ios::binary);
 	hand2.open("hand2.dat", ios::in | ios::binary);
+	
 	b.deck = new Minion[50];
-	b.p1Hand = new Minion [10];
-	b.p2Hand = new Minion [10];
+	b.p1Hand = new Minion [hndSz];
+	b.p2Hand = new Minion [hndSz];
+	
+	bin.read(reinterpret_cast<char *> (&b), sizeof (b));
 	deck.read(reinterpret_cast<char *>(&b.deck[0]), sizeof(Minion)*50);
-	bin.read(reinterpret_cast<char *>(&b), sizeof(b));
-	hand1.read(reinterpret_cast<char *> (&b.p1Hand[0]), sizeof (Minion)*10);
-	hand2.read(reinterpret_cast<char *> (&b.p2Hand[0]), sizeof (Minion)*10);
+	hand1.read(reinterpret_cast<char *> (&b.p1Hand[0]), sizeof (Minion)*hndSz);
+	hand2.read(reinterpret_cast<char *> (&b.p2Hand[0]), sizeof (Minion)*hndSz);
+	
+	for (int i = 0; i < hndSz; i++){	//Allocate memory based on the name size.
+		cout<<i<<"   ";
+		b.p1Hand[i].allocate(b.p1Hand[i].nmL);
+		b.p2Hand[i].allocate(b.p2Hand[i].nmL);
+		b.p1Hand[i].read(nm1, b.p1Hand[i].nmL); //nm1.read(this->name, nameSize);
+		b.p2Hand[i].read(nm2, b.p2Hand[i].nmL);
+		cout<<b.p2Hand[i].getName()<<"    ";
+		cout<<b.p1Hand[i].getName()<<endl;
+	}
+
+	cout<<"PRECLOSE\n";
 	bin.close();
+	cout<<"BINCLOSE\n";
 	hand1.close();
 	hand2.close();	
-	for (int i = 0; i < 10; i++){
-		b.p1Hand[i].setName();
-		b.p2Hand[i].setName();
-	}
+	cout<<"HANDSCLOSE\n";
 	deck.close();
-	cout<<"------------------------\n\n\n"<<b.p1Hand[0].getName()<<"---------------"<<endl;
-	char t;
-	cin>>t;
-	cout<<"CLOSED!";
+	cout<<"DECKCLOSE\n";
+	nm1.close();
+	nm2.close();
+	cout<<"CLOSED\n";
 }
 
 void newG(Board &b) {

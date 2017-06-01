@@ -14,6 +14,7 @@ protected:
 	bool used;
 	bool spec;	//if this card has a special ability, do something
 public:
+	int nmL;	
 	void dblDam();
 	void normDam();
 	void setMult();
@@ -39,6 +40,9 @@ public:
 	int operator +(Minion &);
 	void setDam();
 	void setName();
+	void allocate(int);
+	void read(std::fstream &, int);
+	void write(std::fstream &, int);
 };
 
 
