@@ -67,6 +67,7 @@ int main(int argc, char** argv) {
 					cout<<"\nPLAYER 1"<<endl;
 					pntHand(b, 1);	//print their hand of cards
 					cout<<"\nWhich card?\n";
+					for (int i = 0; i < 10; i++)cout<<b.p2Hand[i].getUsed()<<endl;
 					cin>>cho;	
 					if (cho == -1) {	//Player chooses to stop playing cards
 						b.p1Place = false;
@@ -300,9 +301,11 @@ void GwentAI(Board &b, bool& placing){//Places cards on the field from the 'AI'
 	int delta, deltaZ = 11, ind = 0;;
 	bool boo;
 	delta = b.p1Dam - b.p2Dam;
-	if (b.p1Wins == 0 && b.turn > 3 && delta > 10)
-	cout<<"Delta = "<<delta<<endl;
-	if (delta > 0){
+	if (b.p1Wins == 0 && b.turn > 3 && delta > 10){	//if the computer can afford to lose the round and the player is ahead by 10 points, just fold.
+		placing = false;
+		return;
+	}
+	if (delta > 0){		//if the computer is losing, find the card that deals just enough damage to come out ahead.
 		for (int i = 0; i < 10; i++){
 			if (b.p2Hand[i].getUsed()) 
 				continue;	//skip placed cards
@@ -313,8 +316,8 @@ void GwentAI(Board &b, bool& placing){//Places cards on the field from the 'AI'
 			}
 		}
 	}
-	else{
-		for (int i = 0; i < 10; i++){
+	else{				
+		for (int i = 0; i < 10; i++){	//If the computer is winning by a little bit, find the smallest card to place.
 			if (b.p2Hand[i].getUsed())
 				continue;
 			if (b.p2Hand[i].getDam() < deltaZ){
@@ -323,12 +326,6 @@ void GwentAI(Board &b, bool& placing){//Places cards on the field from the 'AI'
 			}
 		}
 	}
-
-	
-//	do{
-//		rndPick = rand()%10;	//pick random card from hand. I will change this to pick a card to get closer to the p1Damage+3 threshhold
-//	}while(b.p2Hand[rndPick].getUsed());	//Keep looping until you find something you haven't placed
-
 	t = b.p2Hand[ind].getType();	//Fighter etc.
 	switch (t) {	//Places the actual card on the field
 		case 'S':
@@ -382,9 +379,7 @@ void dblD(Board &b){
 		}
 		else return;
 	}
-	bonusD*=0.8;
-	cout<<"BONUS DAMAGE = "<<bonusD<<endl;
-	cout<<"BOARD DAMAGE = "<<b.p1Dam<<endl;
+	bonusD*=0.6;
 	//Swordsman cannot get an advantage
 	b.p1Dam += bonusD;
 }
