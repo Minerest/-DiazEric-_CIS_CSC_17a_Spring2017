@@ -278,14 +278,6 @@ void pntHand(Board &b, const int player){
 	}
 }
 
-template <class T>	//This is weird, do I really define templates here? There's no function prototype or anything. I'd love to know what's the standard convention
-T isDonePlacing(T pDam, T cDam){
-	if (cDam > pDam+3){
-		return true;
-	}
-	return false;
-}
-
 void GwentAI(Board &b, bool& placing){//Places cards on the field from the 'AI'
 	if (!placing)	return;
 	if (b.p1Place == false && b.p2Dam > b.p1Dam){
@@ -546,4 +538,12 @@ void newG(Board &b) {
 	b.p2Left = 10;
 	b.p1Dam = 0;
 	b.p2Dam = 0;
+}
+
+template <class T> //This is weird, do I really define templates here? There's no function prototype or anything. I'd love to know what's the standard convention
+T isDonePlacing(T pDam, T cDam) {
+	if (cDam > pDam + 3) {
+		return true;
+	}
+	return false;
 }
