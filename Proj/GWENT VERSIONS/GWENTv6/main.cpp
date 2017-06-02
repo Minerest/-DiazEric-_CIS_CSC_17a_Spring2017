@@ -67,7 +67,6 @@ int main(int argc, char** argv) {
 					cout<<"\nPLAYER 1"<<endl;
 					pntHand(b, 1);	//print their hand of cards
 					cout<<"\nWhich card?\n";
-					for (int i = 0; i < 10; i++)cout<<b.p2Hand[i].getUsed()<<endl;
 					cin>>cho;	
 					if (cho == -1) {	//Player chooses to stop playing cards
 						b.p1Place = false;
